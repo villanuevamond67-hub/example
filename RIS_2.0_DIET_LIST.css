@@ -1,0 +1,177 @@
+*{box-sizing:border-box}
+:root{--ink:#111;--paper:#fff;--ui:#eef3f7}
+html,body{margin:0;padding:0;background:#dfe4e8;color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+body{padding:62px 12px 24px}
+.diet-toolbar{position:fixed;z-index:20;top:0;left:0;right:0;min-height:50px;padding:8px 14px;background:#fff;border-bottom:1px solid #bfc8cf;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,.08);font-size:13px}
+.diet-toolbar strong{font-size:16px;margin-right:10px}.diet-toolbar #dietStatus{color:#54606a}.toolbar-actions{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end}.diet-toolbar button{font:700 11px Arial;padding:7px 10px;border:1px solid #808b94;background:#fff;border-radius:4px;cursor:pointer}.diet-toolbar button.primary{background:#1f5f88;color:#fff;border-color:#1f5f88}
+.diet-sheet{width:8in;min-height:13.35in;margin:0 auto;background:var(--paper);padding:.20in .18in .15in;box-shadow:0 2px 16px rgba(0,0,0,.2)}
+.document-header{display:grid;grid-template-columns:.83in 1fr 1.18in;align-items:start;min-height:.92in;position:relative}.logo-wrap{display:flex;align-items:flex-start;justify-content:center;padding-top:2px}.logo-wrap img{width:.55in;height:.55in;object-fit:contain;filter:grayscale(100%)}.header-center{text-align:center;padding-top:.12in;line-height:1.17}.hospital-name{font-size:10.5px;font-weight:700;letter-spacing:.1px}.section-name{font-size:10.5px;margin-top:3px}.form-title{font-size:13px;font-weight:700;margin-top:14px}.document-meta{border-collapse:collapse;width:100%;font-size:8px;line-height:1.05}.document-meta td{border:1.3px solid #111;height:.24in;padding:2px 4px;vertical-align:top}.document-meta b{font-weight:800}
+.ward-date-line{height:.35in;display:flex;align-items:end;justify-content:space-between;font-size:10px;font-weight:700;padding:0 6px 4px}.ward-date-line label{display:flex;align-items:end;gap:4px}.ward-date-line input{border:0;border-bottom:1px solid #111;background:transparent;height:20px;font:11px Arial;padding:0 3px}.ward-date-line #wardInput{width:2.05in}.ward-date-line #dietDate{width:1.28in}
+.diet-table{border-collapse:collapse;table-layout:fixed;width:100%;border:1.4px solid #111;font-size:8.4px}.diet-table th,.diet-table td{border:1px solid #111;padding:0}.diet-table thead th{height:.26in;text-align:center;vertical-align:middle;font-weight:700;line-height:1.05}.diet-table thead th span{font-size:7.7px}.diet-table .subhead th{height:.18in;font-size:7px;font-weight:600}.room-col{width:4.8%}.patient-col{width:22.5%}.age-col{width:5.0%}.meal-col{width:3.55%}.remarks-col{width:23%}.diet-table tbody tr{height:.226in}.diet-table td input[type=text],.diet-table td select{width:100%;height:100%;min-height:.218in;border:0;outline:0;background:transparent;font:8.2px Arial;padding:0 2px}.diet-table td input[type=text]:focus,.diet-table td select:focus{box-shadow:inset 0 0 0 1.5px #477da2}.patient-input{text-transform:uppercase}.age-input{text-align:center}.diet-table select{font-size:7.2px;padding-right:1px}.check-cell{text-align:center;vertical-align:middle}.check-cell input[type=checkbox]{appearance:none;-webkit-appearance:none;width:11px;height:11px;margin:0;border:1px solid #222;border-radius:1px;background:#fff;vertical-align:middle;display:inline-grid;place-content:center;cursor:pointer}.check-cell input[type=checkbox]::before{content:"";width:6px;height:3px;border-left:1.5px solid #111;border-bottom:1.5px solid #111;transform:rotate(-45deg) scale(0);transform-origin:center;transition:transform .05s}.check-cell input[type=checkbox]:checked::before{transform:rotate(-45deg) scale(1)}
+.signature-area{display:grid;grid-template-columns:34.8% 15.1% 15.1% 15.1% 19.9%;grid-template-rows:.63in .63in;border-left:1px solid #111;border-bottom:1px solid #111;border-right:1px solid #111;font-size:7.3px}.sig-label{padding:11px 7px 4px;font-weight:700;border-right:1px solid #111}.sig-label.delivered{grid-column:1;grid-row:2;padding-top:23px}.meal-signature{border-right:1px solid #111;padding:13px 4px 0}.meal-signature:nth-of-type(2),.meal-signature:nth-of-type(3),.meal-signature:nth-of-type(4){grid-row:1}.meal-signature:nth-of-type(6),.meal-signature:nth-of-type(7),.meal-signature:nth-of-type(8){grid-row:2}.sig-line{height:22px;border-bottom:1px solid #111;text-align:center;padding-top:11px;font-size:6.9px}.time-line{height:17px;padding-top:3px;font-weight:700}.total-meals{grid-column:5;grid-row:1 / span 2;padding:5px 6px}.nds{font-weight:700;margin-bottom:10px}.total-title{text-align:center;text-decoration:underline;font-weight:700;font-size:8px;margin-bottom:7px}.total-meals label{display:flex;align-items:end;justify-content:space-between;gap:3px;margin:9px 0;font-weight:700}.total-meals input{width:.63in;border:0;border-bottom:1px solid #111;text-align:center;font:8px Arial;background:transparent}.continuation-note{font-size:7px;font-style:italic;font-weight:700;margin-top:2px}
+.diet-toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);padding:8px 14px;background:#111;color:#fff;border-radius:4px;font-size:12px;opacity:0;pointer-events:none;transition:.15s;z-index:30}.diet-toast.show{opacity:.94;transform:translate(-50%,0)}
+@media(max-width:860px){body{padding-left:4px;padding-right:4px}.diet-sheet{transform-origin:top left}.diet-toolbar{align-items:flex-start}.toolbar-actions{gap:4px}}
+@media print{@page{size:A4 portrait;margin:.2in}html,body{background:#fff}body{padding:0}.diet-toolbar,.diet-toast{display:none!important}.diet-sheet{width:100%;min-height:auto;margin:0;padding:0;box-shadow:none}.document-header{grid-template-columns:.83in 1fr 1.18in}.diet-table tbody tr{height:.226in}.diet-table td select{display:none!important}.print-remarks{display:block!important;font-size:8px;line-height:1.1;padding:1px}.diet-table td select option{color:#111}.check-cell input[type=checkbox]{display:none!important}.ward-date-line input[type=date]::-webkit-calendar-picker-indicator{display:none}}
+
+.diet-manager{position:fixed;inset:0;background:rgba(0,0,0,.35);align-items:center;justify-content:center;z-index:999}.diet-manager-box{background:white;padding:20px;border:1px solid #333;display:flex;flex-direction:column;gap:8px;width:320px}.diet-manager-box input,.diet-manager-box select{padding:6px}
+
+.print-remarks{display:none}
+
+/* Keep the two signature rows and totals column inside the selected paper size. */
+.signature-area{grid-template-columns:minmax(0,34.8fr) repeat(3,minmax(0,15.1fr)) minmax(0,19.9fr)!important;overflow:hidden}
+.signature-area>*{min-width:0}
+.total-meals{overflow:hidden}
+.sig-label.prepared{grid-column:1;grid-row:1}
+.meal-signature:nth-of-type(2){grid-column:2;grid-row:1}
+.meal-signature:nth-of-type(3){grid-column:3;grid-row:1}
+.meal-signature:nth-of-type(4){grid-column:4;grid-row:1}
+.sig-label.delivered{grid-column:1;grid-row:2}
+.meal-signature:nth-of-type(6){grid-column:2;grid-row:2}
+.meal-signature:nth-of-type(7){grid-column:3;grid-row:2}
+.meal-signature:nth-of-type(8){grid-column:4;grid-row:2}
+.total-meals{grid-column:5;grid-row:1 / span 2}
+
+/* Medication Main Menu theme — screen controls only. */
+@media screen{
+  html,body{background:#edf3f8;color:#152238;font-family:Inter,"Segoe UI",Arial,Helvetica,sans-serif}
+  body{padding:118px 12px 28px}
+  .diet-toolbar{min-height:92px;padding:14px 22px;display:grid;grid-template-columns:58px minmax(230px,1fr) auto;gap:16px;color:#fff;background:linear-gradient(118deg,#0a2349,#174b82 66%,#0c315d);border:0;border-bottom:4px solid #78a9d7;border-radius:0 0 12px 12px;box-shadow:0 10px 28px rgba(11,38,74,.18);font-size:13px}
+  .diet-toolbar::before{content:"";width:58px;height:58px;background:#fff url("RIS_2.0_HOSPITAL_LOGO.jpg") center/52px 52px no-repeat;border:2px solid rgba(255,255,255,.9);border-radius:50%}
+  .diet-toolbar strong{display:block;margin:0 0 4px;color:#fff;font-size:clamp(1.18rem,2vw,1.65rem);line-height:1.08;letter-spacing:-.025em}
+  .diet-toolbar #dietStatus{color:#d6e7f8;font-size:.84rem;line-height:1.4}
+  .diet-toolbar .toolbar-actions{align-items:center}
+  .diet-toolbar button{min-height:40px;padding:9px 14px;color:#fff;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.48);border-radius:7px;font:800 .74rem Inter,"Segoe UI",Arial;letter-spacing:.02em}
+  .diet-toolbar button:hover{background:rgba(255,255,255,.17)}
+  .diet-toolbar button.primary{color:#fff;background:#2563a6;border-color:#3d7fc3}
+  .diet-sheet{border:1px solid #c8d5e4;border-radius:10px;box-shadow:0 8px 22px rgba(15,45,84,.10)}
+}
+
+@media screen and (max-width:900px){
+  body{padding-top:174px}
+  .diet-toolbar{grid-template-columns:54px 1fr}
+  .diet-toolbar .toolbar-actions{grid-column:1/-1;justify-content:flex-start}
+}
+
+@media screen and (max-width:560px){
+  body{padding-top:325px}
+  .diet-toolbar{padding:13px}
+  .diet-toolbar .toolbar-actions,.diet-toolbar .toolbar-actions button{width:100%}
+}
+
+/* Remarks are sourced from the patient's Kardex and are not edited here. */
+.remarks-cell{vertical-align:middle;overflow:hidden}
+.remarks-cell .diet-select{display:none!important}
+.diet-display{display:block;width:100%;height:100%;padding:1px 3px;font:600 7.7px/1.1 Arial,Helvetica,sans-serif;color:#111;white-space:normal;overflow:hidden}
+
+/* ===== RIS 4.0 multi-page Diet List printing ===== */
+.diet-page + .diet-page{margin-top:14px}
+.diet-page{break-inside:avoid;page-break-inside:avoid}
+
+@media print{
+  .diet-page + .diet-page{margin-top:0}
+  .diet-page{break-after:page;page-break-after:always}
+  .diet-page:last-of-type{break-after:auto;page-break-after:auto}
+
+  /* Keep the original grid/layout, but improve contrast and legibility. */
+  .diet-table{font-size:8.8px!important}
+  .diet-table thead th{font-weight:800!important}
+  .diet-table td input[type=text]{font-size:8.6px!important;font-weight:600!important;color:#000!important;-webkit-text-fill-color:#000!important}
+  .print-remarks,.diet-display{font-size:8.5px!important;line-height:1.05!important;font-weight:600!important;color:#000!important;overflow:hidden}
+  .ward-date-line input,.total-meals input{font-weight:700!important;color:#000!important;-webkit-text-fill-color:#000!important}
+
+  /* Print diet checks directly in the table without checkbox borders/lines. */
+.check-cell input[type=checkbox]{
+  display:none!important;
+}
+.check-cell.print-checked::after{
+  content:"✓"!important;
+  display:inline-block!important;
+  color:#000!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  line-height:1!important;
+}
+}
+
+
+/* ===== Diet List paper-size selector: A4 + Legal ===== */
+.paper-size-control{display:inline-flex;align-items:center;gap:6px;font:800 10px Arial,Helvetica,sans-serif;letter-spacing:.02em}
+.paper-size-control select{height:32px;min-width:72px;padding:4px 24px 4px 8px;border:1px solid #808b94;border-radius:4px;background:#fff;color:#152238;font:800 11px Arial,Helvetica,sans-serif;cursor:pointer}
+
+@media screen{
+  .diet-toolbar .paper-size-control{min-height:40px;padding:0 9px;color:#fff;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.48);border-radius:7px}
+  .diet-toolbar .paper-size-control select{height:30px;min-width:70px;border-color:rgba(255,255,255,.62);background:#fff;color:#0a2349}
+  html[data-print-paper="a4"] .diet-sheet{width:8.27in;min-height:11.69in}
+  html[data-print-paper="legal"] .diet-sheet{width:8in;min-height:13.35in}
+}
+
+@media print{
+  /* A4 is the default. JavaScript injects the matching @page rule when Legal is selected. */
+  html[data-print-paper="a4"] .diet-table tbody tr{height:.218in!important}
+  html[data-print-paper="a4"] .diet-table td input[type=text],
+  html[data-print-paper="a4"] .diet-table td select{min-height:.210in!important}
+  html[data-print-paper="a4"] .signature-area{grid-template-rows:.60in .60in!important}
+  html[data-print-paper="a4"] .sig-label{padding-top:9px!important}
+  html[data-print-paper="a4"] .sig-label.delivered{padding-top:20px!important}
+  html[data-print-paper="a4"] .meal-signature{padding-top:10px!important}
+  html[data-print-paper="a4"] .total-meals label{margin:7px 0!important}
+}
+
+/* RIS teal screen theme. */
+@media screen {
+  html,
+  body {
+    color:#142725;
+    background:#eef4f2;
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  }
+
+  .diet-toolbar {
+    color:#f6fffc;
+    background:#103f3a;
+    border-bottom-color:#66b9aa;
+    border-radius:0 0 18px 18px;
+    box-shadow:0 10px 28px rgba(16,63,58,.18);
+  }
+
+  .diet-toolbar #dietStatus {
+    color:#b9d9d3;
+  }
+
+  .diet-toolbar button,
+  .diet-toolbar .paper-size-control {
+    border-color:rgba(255,255,255,.42);
+    border-radius:11px;
+    color:#f6fffc;
+    background:rgba(255,255,255,.08);
+  }
+
+  .diet-toolbar button:hover {
+    background:rgba(255,255,255,.16);
+  }
+
+  .diet-toolbar button.primary {
+    color:#fff;
+    background:#16776c;
+    border-color:#66b9aa;
+    box-shadow:0 7px 15px rgba(22,119,108,.18);
+  }
+
+  .diet-toolbar .paper-size-control select {
+    border-color:#cfe0dc;
+    border-radius:8px;
+    color:#142725;
+  }
+
+  .diet-sheet {
+    border-color:#dce7e4;
+    border-radius:18px;
+    box-shadow:0 8px 30px rgba(29,72,65,.09);
+  }
+
+  .diet-manager-box {
+    border-color:#dce7e4;
+    border-radius:18px;
+    box-shadow:0 16px 38px rgba(29,72,65,.18);
+  }
+}

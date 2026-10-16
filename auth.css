@@ -1,0 +1,50 @@
+.ris-account-bar {
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: calc(100vw - 24px);
+    padding: 7px 9px;
+    border: 1px solid #cbd5e1;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .96);
+    box-shadow: 0 4px 18px rgba(15, 23, 42, .18);
+    color: #334155;
+    font: 600 11px/1.2 Arial, sans-serif;
+}
+.ris-sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #16a34a; }
+.ris-account-bar.has-error .ris-sync-dot { background: #dc2626; }
+.ris-account-email { overflow: hidden; max-width: 210px; text-overflow: ellipsis; white-space: nowrap; }
+.ris-signout {
+    border: 0;
+    border-radius: 999px;
+    padding: 6px 9px;
+    background: #7f1d1d;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+}
+.ris-fatal-error {
+    position: fixed;
+    inset: 50% auto auto 50%;
+    z-index: 20000;
+    width: min(480px, calc(100vw - 32px));
+    transform: translate(-50%, -50%);
+    padding: 24px;
+    border: 1px solid #fecaca;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    color: #7f1d1d;
+    font-family: Arial, sans-serif;
+}
+.ris-fatal-error p { color: #334155; }
+.ris-fatal-error a { color: #7f1d1d; font-weight: 700; }
+@media print { .no-print, .ris-fatal-error { display: none !important; } }
+.ris-sync-text { white-space: nowrap; color: #475569; font-weight: 600; }
+.ris-account-bar.is-saving .ris-sync-dot { background: #d97706; }
+.ris-account-bar.has-error .ris-sync-text { color: #b91c1c; }
+@media (max-width: 520px) { .ris-sync-text { display: none; } }

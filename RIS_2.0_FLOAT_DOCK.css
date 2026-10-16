@@ -1,0 +1,371 @@
+/* =========================================================
+   FLOATING DOCK — mini Diet List + mini Medication Database
+   Sits below the Medication Order Form. Screen only.
+   ========================================================= */
+
+body.ris-dock-active {
+    padding-bottom: calc(20px + var(--ris-dock-h, 52px));
+}
+
+.ris-dock {
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    z-index: 900;
+    width: min(1100px, calc(100% - 16px));
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid #1d4e89;
+    border-bottom: 0;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -8px 28px rgba(10, 35, 73, .28);
+    font-family: Arial, Helvetica, sans-serif;
+    color: #17345d;
+}
+
+.ris-dock[hidden] { display: none; }
+
+/* ---------- tab bar ---------- */
+.ris-dock-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 10px;
+    color: #fff;
+    background: linear-gradient(118deg, #0a2349, #174b82 66%, #0c315d);
+    border-radius: 11px 11px 0 0;
+}
+
+.ris-dock-tab,
+.ris-dock-toggle {
+    min-height: 36px;
+    padding: 6px 13px;
+    border: 1px solid rgba(255, 255, 255, .45);
+    border-radius: 8px;
+    color: #fff;
+    background: rgba(255, 255, 255, .09);
+    font: 800 .74rem Arial, Helvetica, sans-serif;
+    letter-spacing: .02em;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.ris-dock-tab:hover,
+.ris-dock-toggle:hover { background: rgba(255, 255, 255, .2); }
+
+.ris-dock-tab[aria-selected="true"].is-open {
+    color: #0a2349;
+    background: #fff;
+    border-color: #fff;
+}
+
+.ris-dock-patient {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 8px;
+    overflow: hidden;
+    font-size: .76rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #d6e7f8;
+}
+
+.ris-dock-patient b { color: #fff; }
+
+.ris-dock-toggle { padding: 6px 11px; }
+
+/* ---------- panel ---------- */
+.ris-dock-panel {
+    max-height: min(46vh, 430px);
+    overflow: auto;
+    padding: 12px;
+    background: #f4f7fb;
+    border-top: 3px solid #78a9d7;
+}
+
+.ris-dock-panel[hidden] { display: none; }
+
+.ris-dock [hidden] { display: none !important; }
+
+.ris-dock button,
+.ris-dock input,
+.ris-dock select {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.ris-dock .rd-btn {
+    min-height: 34px;
+    padding: 6px 12px;
+    border: 1px solid #a9bad0;
+    border-radius: 7px;
+    color: #17345d;
+    background: #fff;
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .02em;
+    cursor: pointer;
+}
+
+.ris-dock .rd-btn:hover { background: #eaf1f9; }
+
+.ris-dock .rd-btn.rd-primary {
+    color: #fff;
+    background: #2563a6;
+    border-color: #3d7fc3;
+}
+
+.ris-dock .rd-btn.rd-primary:hover { background: #1d4e89; }
+
+.ris-dock .rd-btn.rd-danger { color: #9b1c1c; border-color: #e0b4b4; }
+
+.ris-dock input[type="search"],
+.ris-dock input[type="text"] {
+    width: 100%;
+    min-height: 34px;
+    padding: 6px 9px;
+    border: 1px solid #a9bad0;
+    border-radius: 7px;
+    background: #fff;
+    color: #111;
+    font-size: .82rem;
+}
+
+.ris-dock input:focus-visible,
+.ris-dock button:focus-visible {
+    outline: 2px solid #2563a6;
+    outline-offset: 1px;
+}
+
+.rd-msg { font-size: .76rem; font-weight: 700; }
+.rd-msg.is-ok { color: #1b6e3a; }
+.rd-msg.is-error { color: #9b1c1c; }
+
+/* ---------- diet pane ---------- */
+.rd-grid {
+    display: grid;
+    grid-template-columns: minmax(230px, 36%) 1fr;
+    gap: 12px;
+    align-items: start;
+}
+
+.rd-col {
+    min-width: 0;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #c8d5e4;
+    border-radius: 9px;
+}
+
+.rd-col h3 {
+    margin: 0 0 7px;
+    font-size: .74rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #2563a6;
+}
+
+.rd-patients {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 280px;
+    margin-top: 7px;
+    overflow: auto;
+}
+
+.rd-pat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 6px 8px;
+    text-align: left;
+    border: 1px solid #d5dfeb;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.rd-pat:hover { background: #eef4fb; }
+.rd-pat.is-selected { border-color: #2563a6; background: #e3eefb; box-shadow: inset 3px 0 0 #2563a6; }
+
+.rd-room {
+    flex: 0 0 auto;
+    min-width: 38px;
+    padding: 3px 5px;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, .25);
+    border-radius: 6px;
+    background: #e8edf3;
+    font-size: .72rem;
+    font-weight: 800;
+}
+
+.rd-room[data-room="901"] { background: #f9c6d6; }
+.rd-room[data-room="902"] { background: #fff; }
+.rd-room[data-room="903"] { background: #bcd8f5; }
+.rd-room[data-room="904"] { background: #fcd9a8; }
+.rd-room[data-room="905"] { background: #c4e8c4; }
+.rd-room[data-room="906"] { background: #fbf0a6; }
+
+.rd-pat-main { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
+.rd-pat-main b { font-size: .8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rd-pat-main small { font-size: .72rem; color: #35537c; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rd-pat-main small.is-empty { color: #8a99ad; font-style: italic; }
+
+.rd-here {
+    flex: 0 0 auto;
+    padding: 1px 6px;
+    border-radius: 999px;
+    color: #fff;
+    background: #174b82;
+    font-size: .64rem;
+    font-style: normal;
+    font-weight: 800;
+}
+
+.rd-empty { padding: 14px 8px; text-align: center; color: #5b6f8a; font-size: .8rem; }
+
+.rd-editor-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.rd-editor-head strong { font-size: .9rem; }
+.rd-dirty { color: #b45309; font-size: .72rem; font-weight: 800; }
+
+.rd-chips { display: flex; flex-wrap: wrap; gap: 5px; min-height: 28px; margin-bottom: 8px; }
+
+.rd-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 4px 3px 10px;
+    border-radius: 999px;
+    color: #fff;
+    background: #2563a6;
+    font-size: .74rem;
+    font-weight: 700;
+}
+
+.rd-chip button {
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: #fff;
+    background: rgba(255, 255, 255, .25);
+    font-size: .85rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.rd-chip button:hover { background: rgba(255, 255, 255, .45); }
+.rd-chips .rd-none { color: #8a99ad; font-size: .78rem; font-style: italic; align-self: center; }
+
+.rd-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+    gap: 5px;
+    max-height: 150px;
+    margin: 7px 0;
+    padding: 2px;
+    overflow: auto;
+}
+
+.rd-opt {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 32px;
+    padding: 4px 8px;
+    border: 1px solid #d5dfeb;
+    border-radius: 7px;
+    background: #fff;
+    font-size: .78rem;
+    cursor: pointer;
+}
+
+.rd-opt:hover { background: #eef4fb; }
+.rd-opt.is-on { border-color: #2563a6; background: #e3eefb; font-weight: 700; }
+.rd-opt input { flex: 0 0 auto; width: 16px; height: 16px; margin: 0; }
+.rd-opt span { flex: 1 1 auto; min-width: 0; }
+.rd-opt em { color: #8a5a00; font-size: .66rem; font-style: normal; font-weight: 700; }
+
+.rd-x {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 1px solid #e0b4b4;
+    border-radius: 50%;
+    color: #9b1c1c;
+    background: #fff;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.rd-add { display: flex; gap: 6px; margin-bottom: 9px; }
+.rd-add input { flex: 1 1 auto; }
+
+.rd-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+
+.rd-placeholder { padding: 22px 10px; text-align: center; color: #5b6f8a; font-size: .84rem; line-height: 1.5; }
+
+/* ---------- medication pane ---------- */
+.rd-med-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 9px; }
+.rd-med-tools input { flex: 1 1 220px; }
+.rd-med-count { color: #35537c; font-size: .76rem; font-weight: 700; }
+
+.rd-med-form {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid #c8d5e4;
+    border-radius: 9px;
+}
+
+.rd-med-form label { display: flex; flex-direction: column; gap: 3px; font-size: .7rem; font-weight: 800; color: #35537c; }
+.rd-med-form .rd-actions { grid-column: 1 / -1; }
+
+.rd-med-list { display: flex; flex-direction: column; gap: 5px; }
+
+.rd-med-row {
+    display: grid;
+    grid-template-columns: minmax(130px, 1fr) minmax(0, 2.4fr) auto;
+    gap: 10px;
+    align-items: center;
+    padding: 7px 10px;
+    background: #fff;
+    border: 1px solid #d5dfeb;
+    border-radius: 8px;
+}
+
+.rd-med-row strong { font-size: .82rem; }
+.rd-med-meta { min-width: 0; font-size: .73rem; line-height: 1.45; color: #35537c; }
+.rd-med-meta b { color: #17345d; }
+.rd-med-row .rd-row-actions { display: flex; gap: 5px; }
+.rd-med-row .rd-btn { min-height: 30px; padding: 4px 9px; }
+
+/* ---------- small screens ---------- */
+@media (max-width: 760px) {
+    .rd-grid { grid-template-columns: 1fr; }
+    .rd-med-form { grid-template-columns: 1fr 1fr; }
+    .rd-med-row { grid-template-columns: 1fr; }
+    .ris-dock-patient { display: none; }
+    .ris-dock-panel { max-height: 55vh; }
+}
+
+@media print {
+    .ris-dock { display: none !important; }
+}

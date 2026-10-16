@@ -1,0 +1,2257 @@
+* { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        padding: 20px;
+        background: #e9e9e9;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #111;
+    }
+
+    .page {
+        width: 100%;
+        max-width: 1100px;
+        margin: auto;
+        background: white;
+        border: 1px solid #111;
+        padding: 0;
+    }
+
+    .header {
+        display: grid;
+        grid-template-columns: 150px 1fr 150px;
+        min-height: 105px;
+        border-bottom: 1px solid #111;
+    }
+
+    .logo {
+        border-right: 1px solid #111;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 11px;
+        font-weight: bold;
+        padding: 8px;
+    }
+
+    .logo-circle {
+        border: 0;
+        border-radius: 50%;
+        width: 90px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .hospital-logo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+    }
+
+    .title {
+        text-align: center;
+        padding: 12px 5px 5px;
+    }
+
+    .title div:nth-child(1) { font-weight: bold; font-size: 16px; }
+    .title div:nth-child(2) { font-size: 15px; font-weight: bold; margin-top: 4px; }
+    .title div:nth-child(3) { font-size: 15px; font-weight: bold; }
+    .title div:nth-child(4) { font-size: 13px; font-weight: bold; margin-top: 7px; }
+
+    .reference {
+        border-left: 1px solid #111;
+        font-size: 9px;
+    }
+
+    .reference div {
+        min-height: 34px;
+        padding: 4px;
+        border-bottom: 1px solid #111;
+    }
+
+    .reference div:last-child { border-bottom: none; }
+
+    .patient-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.3fr 0.65fr;
+        border-bottom: 1px solid #111;
+    }
+
+    .field {
+        min-height: 28px;
+        border-right: 1px solid #111;
+        display: flex;
+        align-items: center;
+    }
+
+    .field:last-child { border-right: none; }
+
+    .field label {
+        font-weight: bold;
+        font-size: 12px;
+        padding: 5px;
+        white-space: nowrap;
+    }
+
+    .field input {
+        border: 0;
+        outline: none;
+        width: 100%;
+        height: 27px;
+        font-size: 12px;
+        padding: 3px;
+    }
+
+    .ward-diagnosis {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        border-bottom: 1px solid #111;
+    }
+
+    .med-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .med-table th,
+    .med-table td {
+        border-right: 1px solid #111;
+        border-bottom: 1px solid #111;
+        padding: 2px;
+        height: 31px;
+        vertical-align: middle;
+    }
+
+    .med-table th:last-child,
+    .med-table td:last-child {
+        border-right: none;
+    }
+
+    .med-table th {
+        text-align: center;
+        font-size: 10px;
+        line-height: 1.1;
+        height: 42px;
+    }
+
+    .med-table th small {
+        font-size: 8px;
+        font-weight: normal;
+    }
+
+    .med-table td input,
+    .med-table td select {
+        width: 100%;
+        height: 26px;
+        border: 0;
+        outline: none;
+        padding: 2px;
+        font-size: 11px;
+        background: transparent;
+    }
+
+    .medicine-wrap {
+        position: relative;
+        width: 100%;
+    }
+
+    .medicine-input {
+        border: 1px solid #bbb !important;
+        background: #fff !important;
+        border-radius: 2px;
+    }
+
+    .medicine-input:focus {
+        border-color: #333 !important;
+        box-shadow: 0 0 0 1px #333;
+    }
+
+    .auto-field {
+        background: #f5f5f5 !important;
+        color: #222;
+    }
+
+    .auto-field:read-only {
+        cursor: not-allowed;
+    }
+
+    .dependent-select {
+        width: 100%;
+        height: 26px;
+        border: 0;
+        outline: none;
+        padding: 2px;
+        font-size: 11px;
+        background: #f5f5f5;
+        color: #222;
+    }
+
+    .dependent-select:not(:disabled) {
+        background: #fff;
+        cursor: pointer;
+    }
+
+    .dependent-select:disabled {
+        color: #777;
+        cursor: not-allowed;
+    }
+
+    /* Automatically populated dependent fields */
+    .dependent-select:not(:disabled) {
+        font-weight: 500;
+    }
+
+    .status {
+        position: absolute;
+        left: 3px;
+        right: 3px;
+        top: 27px;
+        z-index: 50;
+        background: white;
+        border: 1px solid #888;
+        display: none;
+        max-height: 180px;
+        overflow-y: auto;
+    }
+
+    .status div {
+        padding: 6px;
+        font-size: 11px;
+        cursor: pointer;
+        border-bottom: 1px solid #eee;
+    }
+
+    .status div:hover {
+        background: #eee;
+    }
+
+    .status .no-result {
+        color: #777;
+        cursor: default;
+    }
+
+    .footer-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr 1.2fr 1.2fr;
+        border-bottom: 1px solid #111;
+    }
+
+    .footer-cell {
+        min-height: 80px;
+        border-right: 1px solid #111;
+        padding: 5px;
+        font-size: 10px;
+    }
+
+    .footer-cell:last-child { border-right: none; }
+
+    .footer-title {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+
+    .footer-cell input {
+        width: 100%;
+        border: 0;
+        border-bottom: 1px solid #999;
+        outline: none;
+        font-size: 10px;
+        margin-top: 5px;
+    }
+
+
+    /* Short certification row shown below the Medication Order footer. */
+    .certification-row {
+        min-height: 14px;
+        height: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: center;
+        font-family: "Times New Roman", Times, serif;
+        font-size: 10px;
+        line-height: 13px;
+        font-weight: bold;
+        font-style: italic;
+    }
+
+
+    /* =========================
+       GROUP PRINTING
+       LEGAL PAPER: 8.5 x 14 inches
+       TWO MEDICATION FORMS PER SHEET
+       ========================= */
+    .group-print-workspace {
+        display: none;
+    }
+
+    /*
+       Group-print copies intentionally reuse the normal form's
+       header, field, table, footer, font and row dimensions.
+       No miniature font or compressed row overrides are applied.
+    */
+    .print-sheet {
+        width: 8.5in;
+        height: 14in;
+        margin: 0;
+        padding: 0.16in 0.12in;
+        background: white;
+        page-break-after: always;
+        break-after: page;
+        display: flex;
+        flex-direction: column;
+        gap: 0.10in;
+        align-items: stretch;
+        justify-content: flex-start;
+        overflow: hidden;
+    }
+
+    .print-sheet:last-child {
+        page-break-after: auto;
+        break-after: auto;
+    }
+
+    .print-form-wrapper {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        flex: 0 0 auto;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .print-form-copy {
+        width: 100%;
+        height: auto;
+        border: 1px solid #111;
+        overflow: hidden;
+        background: white;
+        margin: 0;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    /* Keep the group copy identical to the individual form dimensions. */
+    .print-form-copy .header {
+        grid-template-columns: 150px 1fr 150px;
+        min-height: 105px;
+    }
+
+    .print-form-copy .patient-grid {
+        grid-template-columns: 1fr 1.3fr 0.65fr;
+    }
+
+    .print-form-copy .ward-diagnosis {
+        grid-template-columns: 1.3fr 1fr;
+    }
+
+    .print-form-copy .footer-grid {
+        grid-template-columns: 1fr 1.2fr 1.2fr 1.2fr;
+    }
+
+    .print-room-label {
+        min-height: 14px;
+        margin: 0;
+        padding: 0 2px 2px;
+        font-size: 9px;
+        font-weight: bold;
+        line-height: 12px;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    @media print {
+        @page {
+            size: 8.5in 14in;
+            margin: 0;
+        }
+
+        html, body {
+            width: 8.5in;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body.group-printing {
+            background: white;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        body.group-printing > *:not(#groupPrintWorkspace) {
+            display: none !important;
+        }
+
+        body.group-printing #groupPrintWorkspace {
+            display: block !important;
+        }
+
+        body.group-printing .print-sheet {
+            margin: 0;
+        }
+    }
+
+    /* =========================
+       MAIN MENU / DASHBOARD
+       ========================= */
+    .main-menu {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto 15px;
+        background: white;
+        border: 1px solid #111;
+        padding: 15px;
+    }
+
+    .menu-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        border-bottom: 1px solid #bbb;
+        padding-bottom: 12px;
+    }
+
+    .menu-header h1 {
+        margin: 0 0 4px;
+        font-size: 21px;
+    }
+
+    .menu-header p {
+        margin: 0;
+        color: #555;
+        font-size: 12px;
+    }
+
+    .menu-tools {
+        display: grid;
+        grid-template-columns: 1fr 180px auto;
+        gap: 8px;
+        margin: 12px 0;
+    }
+
+    .menu-tools input,
+    .menu-tools select {
+        height: 36px;
+        border: 1px solid #888;
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+
+    .menu-header-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .database-panel {
+        display: none;
+        border: 1px solid #777;
+        margin: 12px 0;
+        background: #fafafa;
+    }
+
+    .database-panel.is-open {
+        display: block;
+    }
+
+    .database-panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        background: #eee;
+        border-bottom: 1px solid #999;
+    }
+
+    .database-panel-header h2 {
+        margin: 0 0 2px;
+        font-size: 16px;
+    }
+
+    .database-panel-header p {
+        margin: 0;
+        font-size: 11px;
+        color: #555;
+    }
+
+    .database-editor {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr 1fr 1fr;
+        gap: 8px;
+        padding: 12px;
+        border-bottom: 1px solid #bbb;
+    }
+
+    .database-field label {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .database-field input {
+        width: 100%;
+        min-height: 36px;
+        border: 1px solid #888;
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    .database-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .database-message {
+        margin-left: auto;
+        font-size: 11px;
+        font-weight: bold;
+        min-height: 14px;
+    }
+
+    .database-message.success { color: #176b24; }
+    .database-message.error { color: #9b1c1c; }
+
+    .database-browser {
+        padding: 12px;
+    }
+
+    .database-browser-tools {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+
+    .database-browser-tools input {
+        width: 100%;
+        height: 36px;
+        border: 1px solid #888;
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+
+    .database-count {
+        font-size: 11px;
+        color: #444;
+        white-space: nowrap;
+    }
+
+    .database-list {
+        border: 1px solid #aaa;
+        background: white;
+        max-height: 330px;
+        overflow-y: auto;
+    }
+
+    .database-row {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr 0.75fr 1fr 110px;
+        gap: 8px;
+        align-items: center;
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+        font-size: 11px;
+    }
+
+    .database-row:last-child {
+        border-bottom: none;
+    }
+
+    .database-row strong {
+        font-size: 12px;
+    }
+
+    .database-row-actions {
+        display: flex;
+        gap: 4px;
+        justify-content: flex-end;
+    }
+
+    .database-row-actions button {
+        padding: 5px 7px;
+        font-size: 9px;
+    }
+
+    .database-empty {
+        padding: 18px;
+        text-align: center;
+        color: #666;
+        font-size: 12px;
+    }
+
+    .order-summary {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+    }
+
+    .summary-card {
+        border: 1px solid #aaa;
+        padding: 8px 12px;
+        min-width: 130px;
+        background: #f7f7f7;
+        font-size: 12px;
+    }
+
+    .room-section {
+        border: 1px solid #999;
+        margin-bottom: 12px;
+    }
+
+    .room-title {
+        background: #eee;
+        border-bottom: 1px solid #999;
+        padding: 8px 10px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-card {
+        display: grid;
+        grid-template-columns: minmax(250px, 1fr) 90px 105px 110px minmax(300px, 350px);
+        gap: 8px;
+        align-items: center;
+        padding: 9px 10px;
+        border-bottom: 1px solid #ddd;
+        font-size: 11px;
+    }
+
+    .order-card:last-child {
+        border-bottom: none;
+    }
+
+    .order-card strong {
+        font-size: 12px;
+    }
+
+    .order-status {
+        font-weight: bold;
+        text-align: center;
+        padding: 4px;
+        border: 1px solid #999;
+    }
+
+    .card-actions {
+        display: flex;
+        gap: 4px;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        grid-column: 1 / -1;
+        padding-top: 5px;
+        border-top: 1px dashed #ddd;
+    }
+
+    .card-actions button {
+        padding: 5px 7px;
+        font-size: 10px;
+    }
+
+    .empty-orders {
+        padding: 25px;
+        text-align: center;
+        color: #666;
+        border: 1px dashed #999;
+    }
+
+
+
+    /* =========================
+       CBG STRIPS AND NEEDLES
+       ========================= */
+    .hgb-selector {
+        border: 1px solid #aaa;
+        background: #fafafa;
+        padding: 6px;
+        display: grid;
+        grid-template-columns: minmax(95px, 1fr) minmax(90px, 1fr);
+        gap: 6px;
+        align-items: end;
+        min-width: 200px;
+    }
+
+    .hgb-selector .hgb-frequency-label,
+    .hgb-selector .hgb-number-label {
+        display: grid;
+        gap: 2px;
+        font-size: 9px;
+        font-weight: bold;
+    }
+
+    .hgb-selector input[type="number"] {
+        width: 100%;
+        min-width: 60px;
+        height: 27px;
+        border: 1px solid #888;
+        padding: 2px 4px;
+        font-size: 11px;
+        background: white;
+    }
+
+    .hgb-frequency-options {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(38px, 1fr));
+        gap: 4px;
+        align-items: center;
+        min-height: 27px;
+    }
+
+    .hgb-frequency-option {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        min-height: 27px;
+        padding: 2px 4px;
+        border: 1px solid #999;
+        background: white;
+        font-size: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .hgb-frequency-option input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .hgb-frequency-option:has(input:checked) {
+        background: #e6f4e6;
+        border-color: #444;
+    }
+
+    .hgb-selector input[type="number"]:disabled {
+        background: #eee;
+        color: #777;
+        cursor: not-allowed;
+    }
+
+    .hgb-total-summary {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .hgb-total-row td {
+        background: #efefef;
+        font-weight: bold;
+        text-align: center;
+        border-top: 2px solid #111;
+    }
+
+    .hgb-total-row input {
+        font-weight: bold;
+        text-align: center;
+        background: #efefef !important;
+    }
+
+    .hgb-frequency-note {
+        font-size: 9px;
+        color: #444;
+        margin-top: 3px;
+    }
+
+    .hgb-page { display: none; }
+
+    .hgb-page .field select {
+        border: 0;
+        outline: none;
+        width: 100%;
+        height: 27px;
+        font-size: 12px;
+        padding: 3px;
+        background: white;
+    }
+
+    .hgb-page .hgb-readonly {
+        background: #f5f5f5;
+        font-weight: bold;
+    }
+
+    .hgb-table td input {
+        width: 100%;
+        height: 26px;
+        border: 0;
+        outline: none;
+        padding: 2px;
+        font-size: 11px;
+        background: transparent;
+    }
+
+    .hgb-table td input[type="number"] { text-align: center; }
+    .hgb-table td input:read-only { background: #f8f8f8; }
+
+    .hgb-selection-note {
+        padding: 7px 10px;
+        border-bottom: 1px solid #111;
+        background: #f7f7f7;
+        font-size: 10px;
+    }
+
+    @media (max-width: 900px) {
+        .order-card {
+            grid-template-columns: 1fr 90px 95px 90px;
+        }
+
+        .hgb-selector,
+        .card-actions {
+            grid-column: 1 / -1;
+        }
+
+        .card-actions { justify-content: flex-start; }
+    }
+
+    .primary-btn {
+        background: #111;
+        color: white;
+    }
+
+    .primary-btn:hover {
+        background: #333;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 8px;
+        padding: 10px;
+        flex-wrap: wrap;
+    }
+
+    button {
+        border: 1px solid #333;
+        background: #fff;
+        padding: 8px 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    button:hover { background: #eee; }
+
+    .help {
+        padding: 0 10px 10px;
+        font-size: 11px;
+        color: #555;
+    }
+
+    @media print {
+        body {
+            background: white;
+            padding: 0;
+        }
+
+        .page {
+            max-width: none;
+            border: 1px solid #111;
+        }
+
+        .buttons, .help {
+            display: none;
+        }
+
+        input {
+            color: black !important;
+        }
+    }
+
+    /* =========================
+       INDIVIDUAL FORM PRINT MARGIN
+       Adds a small, even gap from the paper edges (all print settings).
+       Group printing remains unchanged.
+       ========================= */
+    @media print {
+        body.individual-form-printing,
+        body.cbg-form-printing {
+            width: 8.5in !important;
+            min-height: 14in;
+            margin: 0 !important;
+            padding: 0.15in !important;
+            background: white;
+        }
+
+        body.individual-form-printing .page,
+        body.cbg-form-printing .page {
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+            border: 1px solid #111;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .menu-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .menu-tools {
+            grid-template-columns: 1fr;
+        }
+        .menu-header-actions {
+            justify-content: flex-start;
+        }
+
+        .database-editor {
+            grid-template-columns: 1fr;
+        }
+
+        .database-row {
+            grid-template-columns: 1fr;
+        }
+
+        .database-row-actions {
+            justify-content: flex-start;
+        }
+
+        .database-browser-tools {
+            grid-template-columns: 1fr;
+        }
+
+
+        .order-card {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .hgb-selector {
+            grid-template-columns: 1fr;
+        }
+
+        .hgb-frequency-options {
+            grid-template-columns: repeat(2, minmax(60px, 1fr));
+        }
+
+        .hgb-selector,
+        .card-actions {
+            grid-column: 1 / -1;
+        }
+
+        .hgb-selector {
+            grid-template-columns: 1fr;
+            align-items: stretch;
+        }
+
+        .card-actions {
+            justify-content: flex-start;
+        }
+
+        body { padding: 5px; }
+        .header { grid-template-columns: 80px 1fr 90px; }
+        .logo-circle { width: 55px; height: 55px; font-size: 8px; }
+        .title div:nth-child(1),
+        .title div:nth-child(2),
+        .title div:nth-child(3) { font-size: 10px; }
+        .title div:nth-child(4) { font-size: 9px; }
+
+        .patient-grid,
+        .ward-diagnosis {
+            grid-template-columns: 1fr;
+        }
+
+        .field { border-right: 0; border-bottom: 1px solid #111; }
+
+        .med-table {
+            min-width: 850px;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        .footer-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .footer-cell:nth-child(2) { border-right: none; }
+    }
+
+
+    /* =========================================================
+       REFERENCE-MATCHED PRINT LAYOUT (Medication + CBG)
+       - Times New Roman like the supplied hospital form
+       - Portrait output with exactly two form slots per sheet
+       - Paper-size agnostic: Legal, A4, and Letter are supported
+         by selecting the desired paper in the browser print dialog
+       ========================================================= */
+    .refprint-form {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        border: 1.35px solid #111;
+        background: #fff;
+        color: #000;
+        font-family: "Times New Roman", Times, serif;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .refprint-form * {
+        box-sizing: border-box;
+        font-family: "Times New Roman", Times, serif;
+    }
+
+    .refprint-header {
+        flex: 0 0 0.82in;
+        display: grid;
+        grid-template-columns: 1.8in 1fr 1.23in;
+        border-bottom: 1.25px solid #111;
+        min-height: 0;
+    }
+
+    .refprint-logo {
+        border-right: 1.25px solid #111;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 0.025in;
+    }
+
+    .refprint-logo img {
+        width: 0.92in;
+        height: 0.72in;
+        object-fit: contain;
+        display: block;
+    }
+
+    .refprint-heading {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        line-height: 1.06;
+        padding: 0.02in 0.04in;
+        font-weight: 700;
+        overflow: hidden;
+    }
+
+    .refprint-heading .republic { font-size: 10.6pt; }
+    .refprint-heading .department { font-size: 9.4pt; margin-top: 0.035in; }
+    .refprint-heading .hospital { font-size: 9.7pt; margin-top: 0.035in; }
+    .refprint-heading .section { font-size: 9.3pt; margin-top: 0.035in; }
+
+    .refprint-reference {
+        border-left: 1.25px solid #111;
+        display: grid;
+        grid-template-rows: repeat(3, 1fr);
+        font-size: 6.3pt;
+        line-height: 1.05;
+        text-align: center;
+        font-weight: 700;
+        min-width: 0;
+    }
+
+    .refprint-reference > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0.01in 0.02in;
+        border-bottom: 1.1px solid #111;
+        overflow: hidden;
+    }
+
+    .refprint-reference > div:last-child { border-bottom: 0; }
+    .refprint-reference .ref-value { font-size: 6.1pt; margin-top: 0.015in; }
+
+    .refprint-titlebar {
+        flex: 0 0 0.205in;
+        min-height: 0;
+        border-bottom: 1.25px solid #111;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-weight: 700;
+        font-size: 10.4pt;
+        line-height: 1;
+        padding-top: 0.005in;
+    }
+
+    .refprint-row {
+        flex: 0 0 0.205in;
+        display: grid;
+        min-height: 0;
+        border-bottom: 1.1px solid #111;
+    }
+
+    .refprint-row.two-col { grid-template-columns: 76% 24%; }
+    .refprint-row.three-col { grid-template-columns: 44% 34% 22%; }
+    .refprint-row.ward-dx { grid-template-columns: 55% 45%; flex-basis: 0.31in; }
+
+    .refprint-field {
+        min-width: 0;
+        border-right: 1.1px solid #111;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        font-size: 8.3pt;
+        line-height: 1;
+        padding: 0 0.035in;
+    }
+
+    .refprint-field:last-child { border-right: 0; }
+    .refprint-field strong {
+        flex: 0 0 auto;
+        margin-right: 0.025in;
+        font-weight: 700;
+    }
+
+    .refprint-field .refprint-value {
+        flex: 1 1 auto;
+        min-width: 0;
+        font-size: 8.2pt;
+        line-height: 1.02;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .refprint-row.ward-dx .refprint-field {
+        align-items: flex-start;
+        padding-top: 0.035in;
+        font-size: 8.4pt;
+    }
+
+    .refprint-table-wrap {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    table.refprint-table {
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        margin: 0;
+        font-family: "Times New Roman", Times, serif;
+    }
+
+    .refprint-table th,
+    .refprint-table td {
+        border-right: 1.05px solid #111;
+        border-bottom: 1.05px solid #111;
+        padding: 0;
+        overflow: hidden;
+        vertical-align: middle;
+    }
+
+    .refprint-table th:last-child,
+    .refprint-table td:last-child { border-right: 0; }
+
+    .refprint-table thead tr { height: 0.34in; }
+    .refprint-table th {
+        text-align: center;
+        font-size: 7.3pt;
+        font-weight: 700;
+        line-height: 1.02;
+        padding: 0.012in 0.015in;
+    }
+    .refprint-table th small {
+        display: block;
+        font-size: 5.8pt;
+        line-height: 1;
+        font-weight: 700;
+    }
+
+    /* Keep all ten print rows at an equal height.
+       A percentage row height prevents browsers from enlarging only
+       populated rows while collapsing empty rows. */
+    .refprint-table tbody tr { height: 10%; }
+
+    .refprint-cell-value {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0.012in 0.025in;
+        font-size: 7.6pt;
+        line-height: 1.02;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        overflow: hidden;
+    }
+
+    .refprint-cell-value.center {
+        justify-content: center;
+        text-align: center;
+        padding-left: 0.01in;
+        padding-right: 0.01in;
+    }
+
+    .refprint-footer {
+        flex: 0 0 0.69in;
+        display: grid;
+        grid-template-columns: 23% 23% 22% 32%;
+        border-top: 0;
+        min-height: 0;
+    }
+
+    .refprint-footer-cell {
+        min-width: 0;
+        border-right: 1.15px solid #111;
+        padding: 0.035in 0.045in 0.02in;
+        font-size: 7pt;
+        line-height: 1.08;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .refprint-footer-cell:last-child { border-right: 0; }
+    .refprint-footer-title {
+        text-align: center;
+        font-size: 7.3pt;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 0.08in;
+    }
+    .refprint-reminder-label { font-size: 7.4pt; font-weight: 700; }
+    .refprint-reminder-text {
+        margin-top: 0.16in;
+        text-align: center;
+        font-size: 8.3pt;
+        font-weight: 700;
+        font-style: italic;
+        white-space: nowrap;
+    }
+    .refprint-reminder-text u { text-underline-offset: 1px; }
+    .refprint-footer-line { min-height: 0.115in; white-space: normal; overflow-wrap: anywhere; }
+
+    .refprint-certification {
+        flex: 0 0 0.115in;
+        min-height: 0;
+        border-top: 1.15px solid #111;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 6.8pt;
+        line-height: 1;
+        font-weight: 700;
+        font-style: italic;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .refprint-hgb .refprint-heading .hospital { font-size: 9.4pt; }
+    .refprint-hgb .refprint-titlebar { font-size: 9.9pt; }
+    .refprint-hgb .refprint-row { flex-basis: 0.22in; }
+    .refprint-hgb .refprint-table th { font-size: 6.8pt; }
+    .refprint-hgb .refprint-cell-value { font-size: 7.1pt; }
+
+    /* Workspace used for all print paths so individual and group prints
+       share the exact same form geometry. */
+    .print-sheet {
+        box-sizing: border-box;
+        width: 8.5in;
+        height: 14in;
+        margin: 0;
+        padding: 0.10in;
+        background: #fff;
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 0.08in;
+        overflow: hidden;
+        page-break-after: always;
+        break-after: page;
+    }
+
+    .print-sheet:last-child { page-break-after: auto; break-after: auto; }
+
+    .print-form-wrapper {
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .print-form-wrapper.print-blank-slot { visibility: hidden; }
+
+    @media print {
+        /* Use the paper selected in the browser/printer dialog.
+           This intentionally supports Legal, A4, and Letter without
+           forcing one paper size from CSS. */
+        @page {
+            size: portrait;
+            margin: 0;
+        }
+
+        html,
+        body,
+        body.group-printing {
+            width: auto !important;
+            height: auto !important;
+            min-height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #fff !important;
+        }
+
+        body.group-printing > *:not(#groupPrintWorkspace) {
+            display: none !important;
+        }
+
+        body.group-printing #groupPrintWorkspace {
+            display: block !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body.group-printing .print-sheet {
+            width: 100vw !important;
+            height: 100vh !important;
+            min-height: 100vh !important;
+            max-height: 100vh !important;
+            padding: 0.15in !important;
+            gap: 0.07in !important;
+        }
+
+        .refprint-form {
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+        }
+    }
+
+
+    /* =========================================================
+       PRINT EDGE GAP + READABILITY UPDATE
+       - Keeps all existing form/cell dimensions unchanged.
+       - Gives every printed sheet an exact 0.10in inner clearance
+         from the paper edge on all supported paper sizes.
+       - Enlarges print text only; row/cell/header geometry is fixed.
+       ========================================================= */
+    .refprint-heading .republic { font-size: 11.2pt; }
+    .refprint-heading .department { font-size: 9.9pt; }
+    .refprint-heading .hospital { font-size: 10.2pt; }
+    .refprint-heading .section { font-size: 9.8pt; }
+
+    .refprint-reference { font-size: 6.7pt; }
+    .refprint-reference .ref-value { font-size: 6.5pt; }
+
+    .refprint-titlebar { font-size: 10.9pt; }
+    .refprint-field { font-size: 8.9pt; }
+    .refprint-field .refprint-value { font-size: 8.8pt; }
+    .refprint-row.ward-dx .refprint-field { font-size: 9pt; }
+
+    .refprint-table th { font-size: 7.8pt; }
+    .refprint-table th small { font-size: 6.2pt; }
+    .refprint-cell-value { font-size: 8.3pt; }
+
+    .refprint-footer-cell { font-size: 7.4pt; }
+    .refprint-footer-title { font-size: 7.8pt; }
+    .refprint-reminder-label { font-size: 7.9pt; }
+    .refprint-reminder-text { font-size: 8.8pt; }
+    .refprint-certification { font-size: 7.1pt; }
+
+    /* CBG uses the same fixed geometry, with slightly smaller text
+       where its wider table needs extra fitting room. */
+    .refprint-hgb .refprint-heading .hospital { font-size: 9.9pt; }
+    .refprint-hgb .refprint-titlebar { font-size: 10.5pt; }
+    .refprint-hgb .refprint-table th { font-size: 7.3pt; }
+    .refprint-hgb .refprint-cell-value { font-size: 7.9pt; }
+    .refprint-hgb .refprint-reminder-text { font-size: 7.8pt !important; }
+
+/* Patient-to-patient navigation on the Medication Order Form */
+.patient-nav-status {
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #444;
+}
+.buttons button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+/* Keep patient navigation beside the medication form. */
+.patient-side-nav {
+    position: fixed;
+    top: 50%;
+    z-index: 90;
+    width: 126px;
+    min-height: 50px;
+    transform: translateY(-50%);
+    background: #fff;
+    box-shadow: 0 3px 12px rgba(0,0,0,.18);
+}
+.patient-side-nav-prev { left: max(8px, calc(50% - 7in)); }
+.patient-side-nav-next { right: max(8px, calc(50% - 7in)); }
+
+@media (max-width: 1160px) {
+    .patient-side-nav {
+        width: 44px;
+        padding: 7px 4px;
+        font-size: 0;
+    }
+    .patient-side-nav-prev::before { content: "←"; font-size: 20px; }
+    .patient-side-nav-next::before { content: "→"; font-size: 20px; }
+}
+
+@media print {
+    .patient-side-nav { display: none !important; }
+}
+
+/* =========================================================
+   RIS 4.0 MEDICATION MAIN MENU — TEAL SCREEN THEME
+   ========================================================= */
+.main-menu {
+    width: min(1540px, calc(100% - 32px));
+    max-width: none;
+    margin: 0 auto 28px;
+    padding: 0 0 28px;
+    background: transparent;
+    border: 0;
+    font-family: Inter, "Segoe UI", Arial, Helvetica, sans-serif;
+    color: #152238;
+}
+
+.main-menu .menu-header {
+    display: grid;
+    grid-template-columns: 64px minmax(280px, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    min-height: 92px;
+    margin: 0;
+    padding: 14px 22px;
+    color: #fff;
+    background: linear-gradient(118deg, #0a2349, #174b82 66%, #0c315d);
+    border: 0;
+    border-bottom: 4px solid #78a9d7;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 10px 28px rgba(11, 38, 74, 0.18);
+}
+
+.main-menu .menu-header::before {
+    content: "";
+    width: 58px;
+    height: 58px;
+    display: block;
+    background: #fff url("RIS_2.0_HOSPITAL_LOGO.jpg") center / 52px 52px no-repeat;
+    border: 2px solid rgba(255,255,255,.9);
+    border-radius: 50%;
+}
+
+.main-menu .menu-header > div:first-of-type {
+    min-width: 0;
+}
+
+.main-menu .menu-header h1 {
+    margin: 0 0 4px;
+    color: #fff;
+    font-size: clamp(1.25rem, 2.2vw, 1.85rem);
+    line-height: 1.08;
+    letter-spacing: -.025em;
+}
+
+.main-menu .menu-header p {
+    margin: 0;
+    color: #d6e7f8;
+    font-size: .86rem;
+    line-height: 1.4;
+}
+
+.main-menu .menu-header-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.main-menu .menu-header-actions button,
+.main-menu .menu-tools button,
+.main-menu .database-panel button {
+    min-height: 40px;
+    border: 1px solid #a9bad0;
+    border-radius: 7px;
+    padding: 9px 14px;
+    color: #17345d;
+    background: #fff;
+    font-size: .74rem;
+    font-weight: 800;
+    letter-spacing: .02em;
+}
+
+.main-menu .menu-header-actions button {
+    color: #fff;
+    background: rgba(255,255,255,.09);
+    border-color: rgba(255,255,255,.48);
+}
+
+.main-menu .menu-header-actions button:hover {
+    background: rgba(255,255,255,.17);
+}
+
+.main-menu .menu-header-actions .primary-btn,
+.main-menu .menu-tools .primary-btn,
+.main-menu .database-panel .primary-btn {
+    color: #fff;
+    background: #2563a6;
+    border-color: #3d7fc3;
+}
+
+.main-menu .menu-header-actions .dashboard-launch-btn {
+    background: #0d9488;
+    border-color: #2dd4bf;
+    order: -1;
+}
+
+.main-menu .menu-header-actions .dashboard-launch-btn:hover {
+    background: #0f766e;
+}
+
+.main-menu .menu-tools {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) 180px auto auto;
+    gap: 9px;
+    align-items: center;
+    margin: 18px 0;
+    padding: 14px;
+    background: #fff;
+    border: 1px solid #c8d5e4;
+    border-radius: 10px;
+    box-shadow: 0 8px 22px rgba(15,45,84,.07);
+}
+
+.main-menu .menu-tools input,
+.main-menu .menu-tools select {
+    width: 100%;
+    height: 40px;
+    min-height: 40px;
+    border: 1px solid #b6c5d6;
+    border-radius: 7px;
+    padding: 8px 10px;
+    color: #172033;
+    background: #fff;
+    font-size: .78rem;
+}
+
+.main-menu .order-summary,
+.main-menu #savedOrdersList {
+    margin-top: 14px;
+}
+
+.main-menu .database-panel {
+    margin: 14px 0;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #c8d5e4;
+    border-radius: 10px;
+    box-shadow: 0 8px 22px rgba(15,45,84,.07);
+}
+
+.main-menu .database-panel-header {
+    padding: 14px 16px;
+    color: #fff;
+    background: linear-gradient(118deg, #0a2349, #174b82 66%, #0c315d);
+    border-bottom: 3px solid #78a9d7;
+}
+
+.main-menu .database-panel-header h2 {
+    color: #fff;
+    font-size: 1.05rem;
+}
+
+.main-menu .database-panel-header p {
+    color: #d6e7f8;
+}
+
+.main-menu .database-panel-header button {
+    color: #17345d;
+}
+
+.main-menu .database-editor,
+.main-menu .database-browser {
+    background: #fff;
+}
+
+@media (max-width: 900px) {
+    .main-menu .menu-header {
+        grid-template-columns: 54px 1fr;
+    }
+
+    .main-menu .menu-header-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+
+    .main-menu .menu-tools {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .main-menu {
+        width: calc(100% - 20px);
+    }
+
+    .main-menu .menu-header {
+        padding: 13px;
+    }
+
+    .main-menu .menu-header-actions,
+    .main-menu .menu-header-actions button,
+    .main-menu .menu-tools,
+    .main-menu .menu-tools input,
+    .main-menu .menu-tools select,
+    .main-menu .menu-tools button {
+        width: 100%;
+    }
+
+    .main-menu .menu-tools {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   RIS SCREEN THEME — TEAL
+   Official print layouts remain unchanged.
+   ========================================================= */
+@media screen {
+    html,
+    body {
+        color: #142725;
+        background: #eef4f2;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .page {
+        overflow: hidden;
+        border-color: #dce7e4;
+        border-radius: 18px;
+        box-shadow: 0 8px 30px rgba(29, 72, 65, .09);
+    }
+
+    .main-menu {
+        color: #142725;
+    }
+
+    .main-menu .menu-header,
+    .main-menu .database-panel-header {
+        background: #103f3a;
+        border-bottom-color: #66b9aa;
+        box-shadow: 0 10px 28px rgba(16, 63, 58, .18);
+    }
+
+    .main-menu .menu-header p,
+    .main-menu .database-panel-header p {
+        color: #b9d9d3;
+    }
+
+    .main-menu .menu-header-actions .primary-btn,
+    .main-menu .menu-tools .primary-btn,
+    .main-menu .database-panel .primary-btn,
+    .buttons .primary-btn {
+        color: #fff;
+        background: #16776c;
+        border-color: #16776c;
+        box-shadow: 0 7px 15px rgba(22, 119, 108, .18);
+    }
+
+    .main-menu .menu-header-actions .primary-btn:hover,
+    .main-menu .menu-tools .primary-btn:hover,
+    .main-menu .database-panel .primary-btn:hover,
+    .buttons .primary-btn:hover {
+        background: #0d5c53;
+    }
+
+    .main-menu .menu-header-actions button {
+        border-color: rgba(255, 255, 255, .42);
+        color: #f6fffc;
+        background: rgba(255, 255, 255, .08);
+    }
+
+    .main-menu .menu-header-actions button:hover {
+        background: rgba(255, 255, 255, .16);
+    }
+
+    .main-menu .menu-tools {
+        grid-template-columns: minmax(240px, 1fr) auto auto;
+        border-color: #dce7e4;
+        border-radius: 18px;
+        box-shadow: 0 8px 30px rgba(29, 72, 65, .07);
+    }
+
+    .main-menu .menu-tools input,
+    .main-menu .menu-tools select,
+    .main-menu .database-field input,
+    .main-menu .database-browser-tools input {
+        border-color: #d6e2df;
+        border-radius: 10px;
+        color: #142725;
+    }
+
+    .main-menu .menu-tools input:focus,
+    .main-menu .menu-tools select:focus,
+    .main-menu .database-field input:focus,
+    .main-menu .database-browser-tools input:focus {
+        outline: 3px solid rgba(22, 119, 108, .2);
+        border-color: #66b9aa;
+    }
+
+    .main-menu .database-panel,
+    .main-menu .database-list {
+        border-color: #dce7e4;
+        border-radius: 18px;
+        box-shadow: 0 8px 30px rgba(29, 72, 65, .07);
+    }
+
+    .main-menu .database-row {
+        border-color: #edf2f1;
+    }
+
+    .main-menu button,
+    .buttons button,
+    .card-actions button {
+        border-color: #cfe0dc;
+        border-radius: 11px;
+        color: #0d5c53;
+        background: #f2f8f6;
+    }
+
+    .main-menu button:hover,
+    .buttons button:hover,
+    .card-actions button:hover {
+        background: #e3f2ee;
+    }
+
+    .order-summary {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(130px, 1fr));
+        gap: 12px;
+    }
+
+    .summary-card {
+        min-width: 0;
+        min-height: 82px;
+        padding: 15px 16px;
+        border-color: #dce7e4;
+        border-radius: 15px;
+        color: #142725;
+        background: #fff;
+        box-shadow: 0 8px 24px rgba(29, 72, 65, .06);
+        font-size: 1.05rem;
+        line-height: 1.45;
+    }
+
+    .summary-card b {
+        color: #677976;
+        font-size: .72rem;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+    }
+
+    .room-color-legend {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0 0 14px;
+        padding: 12px 14px;
+        border: 1px solid #dce7e4;
+        border-radius: 15px;
+        background: #fff;
+        box-shadow: 0 8px 24px rgba(29, 72, 65, .05);
+    }
+
+    .room-color-legend strong {
+        margin-right: 4px;
+        color: #677976;
+        font-size: .7rem;
+        letter-spacing: .08em;
+    }
+
+    .room-legend-chip {
+    cursor: pointer;
+    font: inherit;
+        min-width: 52px;
+        padding: 6px 10px;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        text-align: center;
+        font-size: .75rem;
+        font-weight: 850;
+    }
+
+    .room-legend-chip.room-901 { color: #6f173d; background: #f7b2ce; border-color: #d9749c; }
+    .room-legend-chip.room-902 { color: #31443f; background: #fff; border-color: #aebbb7; }
+    .room-legend-chip.room-903 { color: #153f64; background: #a9d2ef; border-color: #5d9dca; }
+    .room-legend-chip.room-904 { color: #71370c; background: #f7be85; border-color: #dc873f; }
+    .room-legend-chip.room-905 { color: #174d36; background: #a9dfbe; border-color: #58a97a; }
+    .room-legend-chip.room-906 { color: #5b4600; background: #f6dc72; border-color: #d0aa1f; }
+
+    .room-section {
+        --room-accent: #16776c;
+        --room-soft: #f8fbfa;
+        --room-title-text: #fff;
+        overflow: hidden;
+        border: 1px solid var(--room-accent);
+        border-left-width: 7px;
+        border-radius: 18px;
+        background: var(--room-soft);
+        box-shadow: 0 8px 24px rgba(29, 72, 65, .06);
+    }
+
+    .room-section.room-901 { --room-accent: #c94f7c; --room-soft: #fff0f6; }
+    .room-section.room-902 { --room-accent: #fff; --room-soft: #fff; --room-title-text: #31443f; border-color: #aebbb7; }
+    .room-section.room-903 { --room-accent: #3976a8; --room-soft: #ebf4fb; }
+    .room-section.room-904 { --room-accent: #d9792f; --room-soft: #fff2e6; }
+    .room-section.room-905 { --room-accent: #2f8b67; --room-soft: #eaf7ef; }
+    .room-section.room-906 { --room-accent: #e2b72f; --room-soft: #fff9dc; --room-title-text: #574400; }
+
+    .room-section .room-title {
+        padding: 12px 15px;
+        border-bottom-color: rgba(20, 39, 37, .15);
+        color: var(--room-title-text);
+        background: var(--room-accent);
+    }
+
+    .room-section .order-card {
+        grid-template-columns: minmax(250px, 1fr) 100px 130px minmax(300px, 350px);
+        padding: 13px 15px;
+        border-bottom-color: rgba(20, 39, 37, .11);
+        background: var(--room-soft);
+        font-size: .78rem;
+    }
+
+    .room-section .hgb-selector {
+        border-color: rgba(20, 39, 37, .16);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, .72);
+    }
+
+    .room-section .card-actions {
+        border-top-color: rgba(20, 39, 37, .14);
+    }
+
+    /* ---- Drag to reorder patients inside a room ---- */
+
+    .reorder-hint {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0 0 10px;
+        padding: 8px 14px;
+        border: 1px dashed #bcd2cd;
+        border-radius: 12px;
+        background: #f3f9f8;
+        color: #3a544f;
+        font-size: .72rem;
+        line-height: 1.45;
+    }
+
+    .reorder-hint-locked {
+        border-color: #e0cfa8;
+        background: #fdf7e9;
+        color: #6b5722;
+    }
+
+    .reorder-hint-grip {
+        font-size: 1rem;
+        line-height: 1;
+        color: #0f766e;
+    }
+
+    .order-card-identity {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+    }
+
+    .order-card-patient {
+        min-width: 0;
+    }
+
+    .order-drag {
+        display: grid;
+        grid-template-columns: auto auto;
+        justify-items: center;
+        align-items: center;
+        gap: 2px 3px;
+        flex: 0 0 auto;
+        user-select: none;
+    }
+
+    .drag-handle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 21px;
+        height: 21px;
+        border: 1px solid rgba(20, 39, 37, .18);
+        border-radius: 7px;
+        background: rgba(255, 255, 255, .9);
+        color: #0f766e;
+        font-size: .85rem;
+        line-height: 1;
+        cursor: grab;
+        /* Stop a touch drag from scrolling the page instead of moving the card. */
+        touch-action: none;
+    }
+
+    .drag-handle:hover {
+        border-color: #0f766e;
+        background: #0f766e;
+        color: #fff;
+    }
+
+    .drag-handle:focus-visible {
+        outline: 2px solid #0f766e;
+        outline-offset: 2px;
+    }
+
+    .drag-handle.drag-disabled {
+        border-style: dashed;
+        color: #9aa8a5;
+        cursor: not-allowed;
+    }
+
+    .drag-handle.drag-disabled:hover {
+        border-color: rgba(20, 39, 37, .18);
+        background: rgba(255, 255, 255, .9);
+        color: #9aa8a5;
+    }
+
+    .drag-position {
+        min-width: 15px;
+        color: #5c716d;
+        font-size: .62rem;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .drag-nudge {
+        display: flex;
+        grid-column: 1 / -1;
+        gap: 2px;
+    }
+
+    .drag-nudge-btn {
+        width: 19px;
+        height: 15px;
+        padding: 0;
+        border: 1px solid rgba(20, 39, 37, .18);
+        border-radius: 4px;
+        background: rgba(255, 255, 255, .9);
+        color: #0f766e;
+        font-size: .55rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .drag-nudge-btn:hover:not(:disabled) {
+        border-color: #0f766e;
+        background: #0f766e;
+        color: #fff;
+    }
+
+    .drag-nudge-btn:disabled {
+        color: #c2ccca;
+        cursor: default;
+    }
+
+    .order-card-dragging {
+        position: relative;
+        z-index: 3;
+        border-radius: 12px;
+        box-shadow: 0 10px 26px rgba(15, 118, 110, .28);
+        outline: 2px solid #0f766e;
+        opacity: .95;
+    }
+
+    .order-card-dragging .drag-handle {
+        cursor: grabbing;
+    }
+
+    body.patient-reordering {
+        cursor: grabbing;
+        user-select: none;
+    }
+
+    .medication-tracker {
+        margin: 14px 0;
+        overflow: hidden;
+        border: 1px solid #dce7e4;
+        border-radius: 18px;
+        background: #fff;
+        box-shadow: 0 8px 30px rgba(29, 72, 65, .07);
+    }
+
+    .medication-tracker-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 18px 20px;
+        color: #fff;
+        background: #103f3a;
+    }
+
+    .medication-tracker-header span {
+        display: block;
+        margin-bottom: 4px;
+        color: #9dd1c7;
+        font-size: .67rem;
+        font-weight: 850;
+        letter-spacing: .11em;
+    }
+
+    .medication-tracker-header h2 {
+        margin: 0;
+        color: #fff;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .medication-tracker-header small {
+        color: #b9d9d3;
+        font-size: .76rem;
+    }
+
+    .medication-tracker-table-wrap {
+        overflow-x: auto;
+    }
+
+    .medication-tracker-table {
+        width: 100%;
+        min-width: 620px;
+        border-collapse: collapse;
+    }
+
+    .medication-tracker-table th {
+        padding: 11px 15px;
+        color: #56706b;
+        background: #f2f8f6;
+        text-align: left;
+        font-size: .66rem;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .medication-tracker-table td {
+        padding: 13px 15px;
+        border-top: 1px solid #edf2f1;
+        font-size: .8rem;
+    }
+
+    .medication-tracker-table th:nth-child(3),
+    .medication-tracker-table th:nth-child(4),
+    .medication-tracker-table td:nth-child(3),
+    .medication-tracker-table td:nth-child(4) {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .medication-tracker-empty {
+        padding: 28px !important;
+        color: #677976;
+        text-align: center !important;
+    }
+
+    .patient-side-nav {
+        border-color: #cfe0dc;
+        border-radius: 12px;
+        color: #0d5c53;
+        background: #fff;
+        box-shadow: 0 8px 24px rgba(29, 72, 65, .13);
+    }
+}
+
+@media screen and (max-width: 1180px) {
+    .order-summary {
+        grid-template-columns: repeat(3, minmax(130px, 1fr));
+    }
+
+    .room-section .order-card {
+        grid-template-columns: 1fr 100px 120px;
+    }
+
+    .room-section .hgb-selector,
+    .room-section .card-actions {
+        grid-column: 1 / -1;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .order-summary {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+    }
+
+    .medication-tracker-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .main-menu .menu-tools,
+    .order-summary,
+    .room-section .order-card {
+        grid-template-columns: 1fr;
+    }
+
+    .room-section .hgb-selector,
+    .room-section .card-actions {
+        grid-column: auto;
+    }
+}
+
+/* Clickable room color cards */
+.room-title.room-clickable {
+    cursor: pointer;
+    user-select: none;
+}
+.room-title.room-clickable:hover {
+    filter: brightness(0.97);
+}
+.room-title.room-clickable:focus {
+    outline: 2px solid #0f766e;
+    outline-offset: 2px;
+}
+
+
+.vital-page .header { margin-bottom: 15px; }
+
+/* Diagonal-guide cells (BP / T / P / R) mirroring the official
+   HF-NRS-016 Vital Signs Monitoring Sheet, so staff can pen in
+   multiple readings per shift the same way as on the printed form. */
+.vital-table td.vital-diag {
+    position: relative;
+    background-image: linear-gradient(to top right,
+        transparent calc(50% - 0.4px),
+        #111 50%,
+        transparent calc(50% + 0.4px));
+}
+.vital-table td.vital-diag input {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    font-size: 9px;
+}
+.vital-table td.vital-name,
+.vital-table td.vital-room {
+    font-size: 11px;
+    padding-left: 4px;
+}
+.vital-table td.vital-name {
+    white-space: nowrap;
+}
+.vital-name-text {
+    white-space: normal;
+}
+.vital-cbg-inline {
+    display: inline-block;
+    min-width: 54px;
+    margin-left: 5px;
+    border-bottom: 1px solid #111;
+    font-size: 9px;
+    font-weight: bold;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+}
+/* Blank separator row between the two rooms on a paired-room sheet.
+   It carries no input boxes and no diagonal guides, so it reads as a
+   divider and is never written in, with a faint label naming the room
+   that starts below it. */
+.vital-table tr.vital-spacer-row td {
+    background: #fff;
+}
+.vital-table tr.vital-spacer-row td.vital-name {
+    text-align: left;
+    vertical-align: middle;
+}
+.vital-spacer-label {
+    display: inline-block;
+    color: #9aa5a2;
+    font-size: 8px;
+    font-weight: bold;
+    letter-spacing: .09em;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.vital-room-group-label {
+    align-self: center;
+    font-size: 11px;
+    font-weight: bold;
+}
+.vital-room-group-btn.active {
+    background: #0f766e;
+    border-color: #0f766e;
+    color: #fff;
+}
+
+#vitalPrintWorkspace { display: none; }
+
+@media print {
+    @page vital-sheet { size: A4 portrait; margin: 4mm; }
+    body.vital-batch-printing { margin: 0; padding: 0; }
+    body.vital-batch-printing > * { display: none !important; }
+    body.vital-batch-printing > #vitalPrintWorkspace { display: block !important; }
+    #vitalPrintWorkspace .vital-print-sheet {
+        page: vital-sheet;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        border: 1px solid #111;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: visible;
+        break-after: page;
+        break-inside: avoid;
+    }
+    #vitalPrintWorkspace .vital-print-sheet:last-child { break-after: auto; }
+    #vitalPrintWorkspace .table-scroll { overflow: visible; }
+    #vitalPrintWorkspace .vital-table { min-width: 0; }
+    #vitalPrintWorkspace .header { grid-template-columns: 120px 1fr 120px; }
+    #vitalPrintWorkspace .patient-grid { grid-template-columns: 1fr 1.3fr 0.65fr; }
+    #vitalPrintWorkspace .vital-table tr { break-inside: avoid; }
+    #vitalPrintWorkspace .vital-table td { height: 8.3mm; }
+    #vitalPrintWorkspace .vital-table td.vital-diag { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    #vitalPrintWorkspace .vital-spacer-label { color: #8e9a97; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .vital-form-printing > * { display:none !important; }
+    .vital-form-printing #vitalSignPage { display:block !important; }
+    .vital-form-printing #vitalSignPage .buttons { display:none !important; }
+    .vital-form-printing #vitalSignPage .help { display:none !important; }
+}

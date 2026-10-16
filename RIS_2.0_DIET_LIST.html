@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LGH Nutrition and Dietetics Section - Diet List</title>
+<link rel="stylesheet" href="RIS_2.0_DIET_LIST.css">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+<div class="diet-toolbar" aria-label="Diet list controls">
+    <div>
+        <strong>DIET LIST</strong>
+        <span id="dietStatus">Loading patient list...</span>
+    </div>
+    <div class="toolbar-actions">
+        <button type="button" onclick="reloadPatients()">LOAD PATIENTS</button>
+        <button type="button" onclick="openDietManager()">DIET MANAGER</button>
+        <button type="button" onclick="saveDietList()">SAVE DIET LIST</button>
+        <label class="paper-size-control" for="dietPaperSize">PAPER
+            <select id="dietPaperSize" aria-label="Diet list print paper size" onchange="setDietPaperSize(this.value)">
+                <option value="a4">A4</option>
+                <option value="legal">LEGAL</option>
+            </select>
+        </label>
+        <button type="button" class="primary" onclick="printDietList()">PRINT DIET LIST</button>
+        <button type="button" onclick="window.close()">CLOSE</button>
+    </div>
+</div>
+
+<main class="diet-sheet" id="dietSheet">
+    <section class="document-header">
+        <div class="logo-wrap"><img src="RIS_2.0_HOSPITAL_LOGO.jpg" alt="Las Piñas General Hospital and Satellite Trauma Center logo"></div>
+        <div class="header-center">
+            <div class="hospital-name">LAS PIÑAS GENERAL HOSPITAL &amp; SATELLITE TRAUMA CENTER</div>
+            <div class="section-name">Nutrition and Dietetics Section</div>
+            <div class="form-title">DIET LIST</div>
+        </div>
+        <table class="document-meta" aria-label="Document information">
+            <tr><td><b>HF-NDC-003</b></td></tr>
+            <tr><td><b>REVISION NUMBER:</b> <span>0</span></td></tr>
+            <tr><td><b>DATE EFFECTIVE:</b> <span>__________</span></td></tr>
+        </table>
+    </section>
+
+    <section class="ward-date-line">
+        <label>WARD: <input id="wardInput" type="text"></label>
+        <label>DATE: <input id="dietDate" type="date"></label>
+    </section>
+
+    <table class="diet-table">
+        <colgroup>
+            <col class="room-col"><col class="patient-col"><col class="age-col">
+            <col class="meal-col"><col class="meal-col"><col class="meal-col"><col class="meal-col">
+            <col class="meal-col"><col class="meal-col"><col class="meal-col"><col class="meal-col">
+            <col class="meal-col"><col class="meal-col"><col class="meal-col"><col class="meal-col">
+            <col class="remarks-col">
+        </colgroup>
+        <thead>
+            <tr>
+                <th rowspan="2">RM<br>No.</th>
+                <th rowspan="2">PATIENT NAME<br><span>(PRINT)</span></th>
+                <th rowspan="2">AGE</th>
+                <th colspan="4">BREAKFAST</th>
+                <th colspan="4">LUNCH</th>
+                <th colspan="4">SUPPER</th>
+                <th rowspan="2">REMARKS</th>
+            </tr>
+            <tr class="subhead">
+                <th>ful</th><th>sof</th><th>liq</th><th>TF</th>
+                <th>ful</th><th>sof</th><th>liq</th><th>TF</th>
+                <th>ful</th><th>sof</th><th>liq</th><th>TF</th>
+            </tr>
+        </thead>
+        <tbody id="dietRows">
+            <tr data-row="0">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 1"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 1"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 1"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 1 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 1 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 1 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 1 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 1 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 1 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 1 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 1 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 1 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 1 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 1 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 1 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 1">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="1">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 2"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 2"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 2"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 2 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 2 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 2 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 2 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 2 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 2 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 2 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 2 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 2 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 2 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 2 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 2 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 2">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="2">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 3"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 3"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 3"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 3 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 3 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 3 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 3 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 3 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 3 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 3 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 3 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 3 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 3 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 3 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 3 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 3">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="3">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 4"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 4"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 4"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 4 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 4 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 4 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 4 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 4 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 4 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 4 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 4 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 4 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 4 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 4 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 4 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 4">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="4">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 5"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 5"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 5"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 5 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 5 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 5 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 5 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 5 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 5 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 5 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 5 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 5 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 5 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 5 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 5 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 5">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="5">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 6"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 6"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 6"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 6 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 6 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 6 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 6 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 6 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 6 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 6 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 6 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 6 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 6 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 6 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 6 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 6">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="6">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 7"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 7"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 7"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 7 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 7 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 7 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 7 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 7 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 7 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 7 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 7 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 7 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 7 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 7 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 7 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 7">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="7">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 8"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 8"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 8"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 8 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 8 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 8 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 8 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 8 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 8 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 8 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 8 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 8 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 8 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 8 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 8 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 8">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="8">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 9"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 9"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 9"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 9 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 9 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 9 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 9 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 9 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 9 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 9 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 9 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 9 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 9 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 9 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 9 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 9">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="9">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 10"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 10"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 10"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 10 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 10 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 10 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 10 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 10 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 10 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 10 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 10 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 10 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 10 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 10 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 10 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 10">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="10">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 11"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 11"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 11"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 11 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 11 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 11 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 11 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 11 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 11 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 11 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 11 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 11 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 11 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 11 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 11 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 11">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="11">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 12"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 12"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 12"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 12 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 12 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 12 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 12 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 12 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 12 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 12 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 12 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 12 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 12 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 12 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 12 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 12">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="12">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 13"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 13"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 13"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 13 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 13 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 13 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 13 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 13 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 13 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 13 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 13 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 13 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 13 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 13 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 13 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 13">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="13">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 14"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 14"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 14"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 14 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 14 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 14 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 14 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 14 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 14 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 14 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 14 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 14 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 14 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 14 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 14 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 14">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="14">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 15"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 15"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 15"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 15 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 15 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 15 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 15 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 15 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 15 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 15 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 15 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 15 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 15 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 15 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 15 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 15">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="15">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 16"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 16"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 16"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 16 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 16 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 16 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 16 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 16 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 16 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 16 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 16 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 16 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 16 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 16 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 16 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 16">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="16">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 17"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 17"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 17"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 17 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 17 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 17 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 17 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 17 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 17 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 17 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 17 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 17 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 17 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 17 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 17 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 17">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="17">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 18"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 18"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 18"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 18 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 18 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 18 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 18 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 18 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 18 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 18 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 18 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 18 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 18 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 18 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 18 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 18">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="18">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 19"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 19"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 19"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 19 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 19 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 19 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 19 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 19 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 19 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 19 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 19 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 19 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 19 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 19 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 19 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 19">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="19">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 20"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 20"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 20"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 20 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 20 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 20 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 20 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 20 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 20 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 20 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 20 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 20 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 20 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 20 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 20 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 20">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="20">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 21"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 21"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 21"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 21 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 21 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 21 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 21 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 21 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 21 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 21 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 21 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 21 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 21 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 21 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 21 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 21">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="21">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 22"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 22"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 22"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 22 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 22 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 22 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 22 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 22 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 22 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 22 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 22 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 22 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 22 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 22 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 22 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 22">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="22">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 23"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 23"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 23"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 23 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 23 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 23 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 23 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 23 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 23 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 23 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 23 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 23 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 23 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 23 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 23 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 23">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="23">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 24"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 24"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 24"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 24 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 24 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 24 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 24 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 24 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 24 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 24 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 24 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 24 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 24 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 24 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 24 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 24">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="24">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 25"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 25"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 25"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 25 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 25 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 25 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 25 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 25 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 25 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 25 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 25 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 25 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 25 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 25 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 25 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 25">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="25">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 26"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 26"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 26"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 26 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 26 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 26 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 26 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 26 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 26 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 26 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 26 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 26 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 26 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 26 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 26 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 26">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="26">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 27"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 27"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 27"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 27 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 27 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 27 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 27 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 27 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 27 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 27 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 27 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 27 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 27 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 27 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 27 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 27">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="27">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 28"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 28"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 28"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 28 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 28 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 28 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 28 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 28 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 28 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 28 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 28 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 28 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 28 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 28 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 28 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 28">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="28">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 29"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 29"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 29"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 29 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 29 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 29 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 29 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 29 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 29 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 29 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 29 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 29 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 29 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 29 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 29 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 29">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="29">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 30"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 30"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 30"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 30 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 30 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 30 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 30 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 30 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 30 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 30 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 30 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 30 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 30 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 30 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 30 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 30">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="30">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 31"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 31"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 31"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 31 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 31 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 31 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 31 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 31 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 31 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 31 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 31 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 31 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 31 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 31 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 31 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 31">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="31">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 32"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 32"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 32"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 32 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 32 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 32 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 32 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 32 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 32 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 32 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 32 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 32 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 32 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 32 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 32 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 32">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="32">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 33"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 33"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 33"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 33 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 33 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 33 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 33 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 33 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 33 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 33 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 33 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 33 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 33 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 33 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 33 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 33">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="33">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 34"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 34"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 34"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 34 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 34 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 34 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 34 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 34 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 34 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 34 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 34 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 34 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 34 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 34 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 34 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 34">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="34">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 35"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 35"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 35"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 35 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 35 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 35 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 35 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 35 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 35 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 35 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 35 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 35 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 35 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 35 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 35 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 35">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr><tr data-row="35">
+        <td class="room-cell"><input class="room-input" type="text" aria-label="Room number row 36"></td>
+        <td class="patient-cell"><input class="patient-input" type="text" aria-label="Patient name row 36"></td>
+        <td class="age-cell"><input class="age-input" type="text" inputmode="numeric" aria-label="Age row 36"></td>
+        <td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="full" aria-label="Row 36 breakfast full"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="soft" aria-label="Row 36 breakfast soft"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="liq" aria-label="Row 36 breakfast liq"></td><td class="check-cell"><input type="checkbox" data-meal="breakfast" data-kind="tf" aria-label="Row 36 breakfast tf"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="full" aria-label="Row 36 lunch full"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="soft" aria-label="Row 36 lunch soft"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="liq" aria-label="Row 36 lunch liq"></td><td class="check-cell"><input type="checkbox" data-meal="lunch" data-kind="tf" aria-label="Row 36 lunch tf"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="full" aria-label="Row 36 supper full"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="soft" aria-label="Row 36 supper soft"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="liq" aria-label="Row 36 supper liq"></td><td class="check-cell"><input type="checkbox" data-meal="supper" data-kind="tf" aria-label="Row 36 supper tf"></td>
+        <td class="remarks-cell">
+            <select multiple class="diet-select" aria-label="Diet remarks row 36">
+                <option value=""></option>
+                <option>Regular / Full Diet</option>
+                <option>Soft Diet</option>
+                <option>Mechanical Soft Diet</option>
+                <option>Pureed Diet</option>
+                <option>Clear Liquid Diet</option>
+                <option>Full Liquid Diet</option>
+                <option>Tube Feeding / Enteral Feeding</option>
+                <option>NPO (Nothing by Mouth)</option>
+                <option>Diabetic / Consistent Carbohydrate Diet</option>
+                <option>Low Salt / Low Sodium Diet</option>
+                <option>Cardiac Diet</option>
+                <option>Renal Diet</option>
+                <option>Low Fat Diet</option>
+                <option>Low Cholesterol Diet</option>
+                <option>Low Purine Diet</option>
+                <option>High Protein Diet</option>
+                <option>Low Protein Diet</option>
+                <option>High Calorie Diet</option>
+                <option>Low Calorie Diet</option>
+                <option>High Fiber Diet</option>
+                <option>Low Fiber / Low Residue Diet</option>
+                <option>Bland Diet</option>
+                <option>Gluten-Free Diet</option>
+                <option>Lactose-Free Diet</option>
+                <option>Vegetarian Diet</option>
+                <option>Pediatric Diet</option>
+                <option>Other Therapeutic Diet</option>
+            </select>
+        </td>
+    </tr>
+        </tbody>
+    </table>
+
+    <section class="signature-area">
+        <div class="sig-label prepared">PREPARED BY: NURSE-ON-DUTY</div>
+        <div class="meal-signature"><div class="sig-line">Signature Over Name</div><div class="time-line">TIME:</div></div>
+        <div class="meal-signature"><div class="sig-line">Signature Over Name</div><div class="time-line">TIME:</div></div>
+        <div class="meal-signature"><div class="sig-line">Signature Over Name</div><div class="time-line">TIME:</div></div>
+        <aside class="total-meals" rowspan="2">
+            <div class="nds">To be filled by NDS:</div>
+            <div class="total-title">TOTAL MEALS</div>
+            <label>BREAKFAST: <input id="breakfastTotal" readonly></label>
+            <label>LUNCH: <input id="lunchTotal" readonly></label>
+            <label>SUPPER: <input id="supperTotal" readonly></label>
+        </aside>
+
+        <div class="sig-label delivered">MEALS DELIVERED CONFORMED BY: NURSE-ON-DUTY</div>
+        <div class="meal-signature"><div class="sig-line">Signature Over Name</div><div class="time-line">TIME:</div></div>
+        <div class="meal-signature"><div class="sig-line">Signature Over Name</div><div class="time-line">TIME:</div></div>
+        <div class="meal-signature"><div class="sig-line">Signature Over Name</div><div class="time-line">TIME:</div></div>
+    </section>
+    <div class="continuation-note">***Please use back page for continuation***</div>
+</main>
+
+<div id="dietToast" class="diet-toast" role="status" aria-live="polite"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="ris-cloud.js"></script>
+<script src="app-loader.js" data-app-script="RIS_2.0_DIET_LIST.js"></script>
+
+<div id="dietManager" class="diet-manager" style="display:none">
+ <div class="diet-manager-box">
+  <h3>Diet Manager</h3>
+  <p>Add or remove hospital diet options.</p>
+  <input id="newDietName" placeholder="New diet name">
+  <button onclick="addDietOption()">ADD</button>
+  <select id="dietManagerList" size="8"></select>
+  <button onclick="removeDietOption()">REMOVE SELECTED</button>
+  <button onclick="closeDietManager()">CLOSE</button>
+ </div>
+</div>
+</body>
+</html>

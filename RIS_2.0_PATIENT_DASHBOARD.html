@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LGH Patient Dashboard</title>
+<link rel="stylesheet" href="RIS_2.0_PATIENT_DASHBOARD.css">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+<div class="dash-shell">
+
+    <header class="dash-topbar">
+        <div class="dash-brand">
+            <img class="dash-logo" src="RIS_2.0_HOSPITAL_LOGO.jpg" alt="Las Piñas General Hospital and Satellite Trauma Center logo">
+            <div>
+                <strong>PATIENT DASHBOARD</strong>
+                <span>Las Piñas General Hospital &amp; Satellite Trauma Center</span>
+            </div>
+        </div>
+
+        <nav class="dash-nav" aria-label="RIS sections">
+            <a class="dash-nav-link primary" href="RIS_2.0_Reference_Print_Updated.html?view=neworder">+ NEW ORDER</a>
+            <a class="dash-nav-link" href="RIS_2.0_Reference_Print_Updated.html">MEDICATION ORDERS</a>
+            <a class="dash-nav-link" href="RIS_2.0_Reference_Print_Updated.html?view=hgb">CBG FORM</a>
+            <a class="dash-nav-link" href="RIS_2.0_Reference_Print_Updated.html?view=vital">VITAL SIGNS</a>
+            <a class="dash-nav-link" href="RIS_2.0_DIET_LIST.html">DIET LIST</a>
+            <a class="dash-nav-link" href="RIS_2.0_FORM_HEADING.html">FORM HEADING PRINTER</a>
+            <a class="dash-nav-link" href="RIS_2.0_Reference_Print_Updated.html?view=tracker">MED TRACKER</a>
+            <a class="dash-nav-link" href="RIS_2.0_Reference_Print_Updated.html?view=database">MED DATABASE</a>
+        </nav>
+    </header>
+
+    <div class="dash-subbar">
+        <input id="dashSearch" type="search"
+               placeholder="Search patient name, hospital number, room..."
+               oninput="renderDashboardTable()">
+
+        <label class="dash-sort-control" for="dashSort">SORT
+            <select id="dashSort" onchange="renderDashboardTable()">
+                <option value="room">Room</option>
+                <option value="name">Patient Name</option>
+                <option value="level">Acuity Level</option>
+                <option value="cbg">CBG Frequency</option>
+            </select>
+        </label>
+
+        <div class="dash-room-legend" aria-label="Room color guide">
+            <button type="button" class="dash-room-chip dash-room-901" onclick="filterDashboardRoom('901')" title="Filter Room 901">901</button>
+            <button type="button" class="dash-room-chip dash-room-902" onclick="filterDashboardRoom('902')" title="Filter Room 902">902</button>
+            <button type="button" class="dash-room-chip dash-room-903" onclick="filterDashboardRoom('903')" title="Filter Room 903">903</button>
+            <button type="button" class="dash-room-chip dash-room-904" onclick="filterDashboardRoom('904')" title="Filter Room 904">904</button>
+            <button type="button" class="dash-room-chip dash-room-905" onclick="filterDashboardRoom('905')" title="Filter Room 905">905</button>
+            <button type="button" class="dash-room-chip dash-room-906" onclick="filterDashboardRoom('906')" title="Filter Room 906">906</button>
+            <button type="button" class="dash-room-chip dash-room-clear" onclick="filterDashboardRoom('')" title="Clear room filter">ALL</button>
+        </div>
+
+        <button id="dashReportOpen" type="button" class="dash-report-open" onclick="openDailyConfinementReport()">DAILY &gt;5 DAYS REPORT</button>
+        <button type="button" class="dash-refresh-btn" onclick="reloadDashboardPatients()" title="Reload saved patients">&#8635; REFRESH</button>
+
+        <div id="dashCount" class="dash-count"></div>
+    </div>
+
+    <main class="dash-table-wrap">
+        <table class="dash-table">
+            <thead>
+                <tr>
+                    <th class="dash-col-name">PATIENT NAME</th>
+                    <th class="dash-col-hosp">HOSPITAL NUMBER</th>
+                    <th class="dash-col-room">ROOM</th>
+                    <th class="dash-col-cbg">CBG FREQUENCY</th>
+                    <th class="dash-col-level">ACUITY LEVEL</th>
+                    <th class="dash-col-confinement">DATE OF CONFINEMENT</th>
+                    <th class="dash-col-remarks">REMARKS</th>
+                </tr>
+            </thead>
+            <tbody id="dashRows">
+                <tr class="dash-empty-row"><td colspan="7">Loading saved patients&hellip;</td></tr>
+            </tbody>
+        </table>
+    </main>
+
+    <p class="dash-help">Click a patient's name to open their Medication Order Form. Acuity Level and confinement dates save automatically. Use the calendar icon to select a confinement date. For stays longer than 5 elapsed calendar days, enter the reason in Remarks; it saves when you leave the field. The daily report includes all rooms.</p>
+    <p id="dashSaveStatus" class="dash-save-status" role="status" aria-live="polite"></p>
+
+</div>
+
+<section id="dashDailyReport" class="dash-report" role="dialog" aria-modal="true" aria-labelledby="dashReportTitle" hidden>
+    <div class="dash-report-sheet">
+        <div class="dash-report-actions">
+            <button type="button" onclick="printDailyConfinementReport()">PRINT REPORT</button>
+            <button type="button" onclick="downloadDailyConfinementReport()">DOWNLOAD CSV</button>
+            <button id="dashReportClose" type="button" onclick="closeDailyConfinementReport()">CLOSE</button>
+        </div>
+        <div class="dash-report-heading">
+            <img src="RIS_2.0_HOSPITAL_LOGO.jpg" alt="" class="dash-report-logo">
+            <div>
+                <p>LAS PIÑAS GENERAL HOSPITAL &amp; SATELLITE TRAUMA CENTER</p>
+                <h1 id="dashReportTitle">Daily Report: Confinement Over 5 Days</h1>
+                <p id="dashReportDate"></p>
+            </div>
+        </div>
+        <p id="dashReportSummary" class="dash-report-summary"></p>
+        <div class="dash-report-table-wrap">
+            <table class="dash-report-table">
+                <thead><tr>
+                    <th>PATIENT NAME</th><th>HOSPITAL NUMBER</th><th>ROOM</th>
+                    <th>CONFINEMENT DATE</th><th>ELAPSED DAYS</th><th>REASON FOR EXTENDED CONFINEMENT</th>
+                </tr></thead>
+                <tbody id="dashReportRows"></tbody>
+            </table>
+        </div>
+        <p class="dash-report-footnote">Compiled from current patient records for the report date. Save or download a copy for your daily records.</p>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="ris-cloud.js"></script>
+<script src="app-loader.js" data-app-script="RIS_2.0_PATIENT_DASHBOARD.js"></script>
+
+</body>
+</html>
